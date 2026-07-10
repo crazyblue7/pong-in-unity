@@ -430,6 +430,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &798088261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 798088262}
+  m_Layer: 0
+  m_Name: camXY
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &798088262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798088261}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 23.35, y: 13.11, z: 23.08852}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1207197415
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 1207197415}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.49, y: 0, z: 0}
+  m_LocalPosition: {x: -21.925, y: 0, z: 0}
   m_LocalScale: {x: 2.6315, y: 7.455, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -565,7 +596,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.10841139, y: 0.10841139, z: 0.10841139}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2061763509}
@@ -786,7 +817,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -3.71}
-  m_LocalScale: {x: 3.7399998, y: 3.7399998, z: 3.7399998}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1385538218}
@@ -804,10 +835,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfc1daae30b3ed1be8f3d77214ec834a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camXY: {fileID: 798088261}
   sprite: {fileID: 1385538217}
   playerGameObject: {fileID: 1207197415}
-  enemyGameObject: {fileID: 2095507881}
-  velocity: {x: -20.34, y: 0}
+  nenemyGameObject: {fileID: 2095507881}
+  velocity: {x: -20, y: 20}
   spriteRotateSpeed: 500
 --- !u!1 &2095507881
 GameObject:
@@ -821,7 +853,7 @@ GameObject:
   - component: {fileID: 2095507883}
   - component: {fileID: 2095507882}
   m_Layer: 0
-  m_Name: enemy
+  m_Name: nenemy
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -924,3 +956,4 @@ SceneRoots:
   - {fileID: 1207197419}
   - {fileID: 2095507885}
   - {fileID: 2061763509}
+  - {fileID: 798088262}
