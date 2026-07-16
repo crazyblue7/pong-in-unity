@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public struct Paddle {
 	public GameObject go; // gameobject
@@ -10,18 +12,26 @@ public class playercontroller : MonoBehaviour {
 	public GameObject camXY;
 	public GameObject playerGameObject;
 	public GameObject nenemyGameObject;
+	public TMP_Text   pointsDisplay;
+	public Vector2    points = new Vector2(0,0);
+	public Vector2    startVelocity = new Vector2(20,1);
 	public Vector2    velocity;
 	public float      spriteRotateSpeed = 30;
 	public float      paddleSpeed;
+	public float      restitution = 1;
 
+	float  nenemyAIoffset;
+	float  idkOfThisSecond;
 	float  radius;
 	float  dt;
 	Paddle player;
 	Paddle nenemy;
+
+	int frameCounterForThisSecond;
 	
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start() {
-		velocity = new Vector2(20,1);
+		velocity = startVelocity;
 		radius   = transform.localScale.x/2;
 
 		player.go         = playerGameObject;
@@ -33,27 +43,52 @@ public class playercontroller : MonoBehaviour {
 		nenemy.scale      = nenemy.go.transform.localScale;
 		nenemy.position.y = 0;
 		nenemy.position.x = nenemy.go.transform.position.x-nenemy.scale.x/2;
+
+		frameCounterForThisSecond = 0;
+		nenemyAIoffset = 0;
 	}
 
-	void LosePoint() {
+	void Reset() {
 		transform.position = new Vector3(0,0,transform.position.z);
 		Start();
 	}
+	
+	void LosePoint() {
+		// well technically we arent losing a point but idk what to call this function so its gonna be lose point
+		// nenemy gains point
+		points.y++;
+		Reset();
+	}
 	void GainPoint() {
-		LosePoint();
+		points.x++;
+		Reset();
 	}
 
+	public void pause() {
+		SceneManager.LoadScene("mainmenu");
+	}
 	// Update is called once per frame
 	void Update() {
 		dt = Time.deltaTime;
+		frameCounterForThisSecond++;
+		idkOfThisSecond += dt;
 
-		Debug.Log("AAAAAAAAA");
-		Debug.Log(nenemy.position.y);
-		Debug.Log(nenemy.go.transform.position.y);
+		if ( idkOfThisSecond > 1 ) {
+			idkOfThisSecond = 0;
+			frameCounterForThisSecond = 0;
+			nenemyAIoffset = Random.Range(-4f,4f);
+			Debug.Log(nenemyAIoffset);
+		}
+
+		if ( Input.GetAxisRaw("Pause") != 0f )
+			pause();
+
+		// update point display
+		pointsDisplay.text = points.x+"            "+points.y;
 
 		// to make it easier to win a point, we check the movement before checking if we are hitting the left of the screen.
 		// input movement
-		player.velocity = Input.GetAxisRaw("Vertical")*paddleSpeed;
+		player.velocity = Input.GetAxisRaw("Vertical")*paddleSpeed*(-1);
 
 		// are we hitting the player paddle HORIZONTALLY? (aka are we in the horizontal area in which we could hit the paddle?)
 		if ( transform.position.x - radius < player.position.x && velocity.x < 0 ) {
@@ -62,6 +97,13 @@ public class playercontroller : MonoBehaviour {
 			     transform.position.y - radius < player.position.y + player.scale.y/2) {
 				// then we invert velocity.
 				velocity.x = 0 - velocity.x;
+
+				// now is the paddle moving? move in its direction
+				if ( player.velocity != 0 )
+					velocity.y = player.velocity;
+
+				// apply friction
+				velocity.y *= restitution;
 			}
 		}
 		// are we hitting the enemy paddle HORIZONTALLY? (aka are we in the horizontal area in which we could hit the paddle?)
@@ -71,6 +113,13 @@ public class playercontroller : MonoBehaviour {
 			     transform.position.y - radius < nenemy.position.y + nenemy.scale.y/2) {
 				// then we invert velocity.
 				velocity.x = 0 - velocity.x;
+
+				// now is the paddle moving? move in its direction
+				if ( nenemy.velocity != 0 )
+					velocity.y = nenemy.velocity;
+
+				// apply friction
+				velocity.y *= restitution;
 			}
 		}
 
@@ -93,7 +142,7 @@ public class playercontroller : MonoBehaviour {
 		}
 
 		// temp ai
-		nenemy.velocity = velocity.y*dt;
+		nenemy.velocity = velocity.y + nenemyAIoffset;
 
 		// add velocity to objects
 		if ( velocity.x < 0 ) {
@@ -107,8 +156,8 @@ public class playercontroller : MonoBehaviour {
 			transform.position.z
 		);
 
-		player.position.y -= player.velocity;
-		nenemy.position.y -= nenemy.velocity;
+		player.position.y -= player.velocity*dt;
+		nenemy.position.y -= nenemy.velocity*dt;
 		player.go.transform.position = new Vector3(player.go.transform.position.x,player.position.y, player.go.transform.position.z);
 		nenemy.go.transform.position = new Vector3(nenemy.go.transform.position.x,nenemy.position.y, nenemy.go.transform.position.z);
 	}
